@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Professional\ProfessionalController;
 
 
 /*
@@ -24,4 +25,6 @@ Route::controller(UserController::class)->group(function() {
     Route::post('/register', 'register');
     Route::post('/login', 'login')->name('login');
 });
+
+Route::middleware('auth:sanctum')->get('/professionals', [ProfessionalController::class, 'index']);
 
