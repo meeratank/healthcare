@@ -8,29 +8,13 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\UserRegisterRequest;
-use Laravel\Sanctum\PersonalAccessToken;
-
-
+use App\Http\Requests\UserLoginRequest;
 
 class UserController extends Controller
 {
-   
-    public function register(Request $request)
+
+    public function register(UserRegisterRequest $request)
     {
-        $validate = Validator::make($request->all(), [
-            'name' => 'required|string|max:250',
-            'email' => 'required|string|email:rfc,dns|max:250|unique:users,email',
-            'password' => 'required|string|min:8|confirmed'
-        ]);
-
-        if($validate->fails()){
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Validation Error!',
-                'data' => $validate->errors(),
-            ], 403);
-        }
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -50,35 +34,20 @@ class UserController extends Controller
     }
 
 
-    public function login(Request $request)
+    public function login(UserLoginRequest $request)
     {
-        $validate = Validator::make($request->all(), [
-            'email' => 'required|string|email',
-            'password' => 'required|string'
-        ]);
-
-        if($validate->fails()){
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Validation Error!',
-                'data' => $validate->errors(),
-            ], 403);  
-        }
-
-        // Check email exist
         $user = User::where('email', $request->email)->first();
 
-        // Check password
-        if(!$user || !Hash::check($request->password, $user->password)) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => 'failed',
                 'message' => 'Invalid credentials'
-                ], 401);
+            ], 401);
         }
 
         $data['token'] = $user->createToken($request->email)->plainTextToken;
         $data['user'] = $user;
-        
+
         $response = [
             'status' => 'success',
             'message' => 'User is logged in successfully.',
@@ -86,7 +55,5 @@ class UserController extends Controller
         ];
 
         return response()->json($response, 200);
-    } 
-     
-
+    }
 }

@@ -22,13 +22,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(UserController::class)->group(function() {
+Route::controller(UserController::class)->group(function () {
     Route::post('/register', 'register');
     Route::post('/login', 'login')->name('login');
 });
 
-Route::middleware('auth:sanctum')->get('/professionals', [ProfessionalController::class, 'index']);
-Route::middleware('auth:sanctum')->post('appointment/store', [AppointmentController::class, 'store']);
-Route::middleware('auth:sanctum')->get('appointment/', [AppointmentController::class, 'index']);
-Route::middleware('auth:sanctum')->get('appointment/{appointment}/{status}', [AppointmentController::class, 'update_status']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/professionals', [ProfessionalController::class, 'index']);
 
+    Route::controller(AppointmentController::class)->group(function () {
+        Route::post('appointment/store', 'store');
+        Route::get('appointment/', 'index');
+        Route::get('appointment/{appointment}/{status}', 'update_status');
+    });
+});

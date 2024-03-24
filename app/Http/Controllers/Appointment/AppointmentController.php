@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Appointment;
+use App\Http\Requests\AppointmentStoreRequest;
 
 class AppointmentController extends Controller
 {
@@ -14,7 +15,7 @@ class AppointmentController extends Controller
     {
         $user = $request->user();
         $appointments = Appointment::where('user_id', $user['id'])
-            ->get();
+            ->paginate(request()->all());
 
         $data['appointment'] = $appointments;
         $response = [
@@ -25,24 +26,8 @@ class AppointmentController extends Controller
         return response()->json($response, 201);
     }
 
-    public function store(Request $request)
+    public function store(AppointmentStoreRequest $request)
     {
-
-        $validate = Validator::make($request->all(), [
-            'healthcare_professional_id' => 'required|integer',
-            'appointment_start_time' => 'required|date_format:Y-m-d H:i:s|after:1 hours|before:appointment_end_time',
-            'appointment_end_time' => 'required|date_format:Y-m-d H:i:s|after:1 hours|after:appointment_start_time',
-            //'status' => 'required|string|in:booked, completed, cancelled'
-        ]);
-
-        if ($validate->fails()) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Validation Error!',
-                'data' => $validate->errors(),
-            ], 403);
-        }
-
         $booked_slot = Appointment::where('healthcare_professional_id', $request->healthcare_professional_id)
             ->where('appointment_start_time', '<=', $request->appointment_start_time)
             ->where('appointment_end_time', '>=', $request->appointment_start_time)

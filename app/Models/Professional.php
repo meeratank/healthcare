@@ -7,10 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Professional extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'specialty'        
-      ];
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array<int, string>
+   */
+  protected $fillable = [
+    'name',
+    'specialty'
+  ];
 }
