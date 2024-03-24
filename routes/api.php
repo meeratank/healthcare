@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Professional\ProfessionalController;
+use App\Http\Controllers\Appointment\AppointmentController;
 
 
 /*
@@ -27,4 +28,7 @@ Route::controller(UserController::class)->group(function() {
 });
 
 Route::middleware('auth:sanctum')->get('/professionals', [ProfessionalController::class, 'index']);
+Route::middleware('auth:sanctum')->post('appointment/store', [AppointmentController::class, 'store']);
+Route::middleware('auth:sanctum')->get('appointment/', [AppointmentController::class, 'index']);
+Route::middleware('auth:sanctum')->get('appointment/{appointment}/{status}', [AppointmentController::class, 'update_status']);
 
