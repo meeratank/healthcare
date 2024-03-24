@@ -11,7 +11,6 @@ class ProfessionalController extends Controller
 
     public function index()
     {
-
         $data = Professional::paginate(request()->all());
        
         $response = [
