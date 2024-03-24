@@ -1,3 +1,49 @@
+# Healthcare Appointment Booking API
+Develop a RESTful API using PHP and Laravel that allows users to book, view, and cancel healthcare appointments. The API should interact with a MySQL database to store and retrieve data.
+
+## Getting started
+
+## Installation
+
+Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/10.x/installation)
+
+
+Clone the repository
+
+    git clone git@github.com:meeratank/healthcare.git
+
+Switch to the repo folder
+
+    cd healthcare
+
+Install all the dependencies using composer
+
+    composer install
+
+Run the database migrations (**Set the database connection in .env before migrating**)
+
+    php artisan migrate
+
+Start the local development server
+
+    php artisan serve
+
+You can now access the server at http://localhost:8000
+
+**Populate the database with seed data which includes users & professionals. This can help you to quickly start testing the api with ready content.**
+
+Run the database seeder and you're done
+
+    php artisan db:seed
+    
+## Environment variables
+
+- `.env` - Environment variables can be set in this file
+
+***Note*** : You can quickly set the database information and other variables in this file and have the application fully working.
+
+----------
+
 
 # Testing API
 
