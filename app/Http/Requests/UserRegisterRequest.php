@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Http\Request;
+use Illuminate\Foundation\Http\FormRequest;
 
-class UserRegisterRequest extends Request
+class UserRegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -12,12 +12,7 @@ class UserRegisterRequest extends Request
     public function authorize(): bool
     {
         return true;
-    }
-
-    public function wantsJson()
-    {
-        return true;
-    }
+    }    
 
     /**
      * Get the validation rules that apply to the request.
@@ -25,13 +20,14 @@ class UserRegisterRequest extends Request
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
+    {        
         return [
             'name' => 'required|string|max:250',
             'email' => 'required|string|email:rfc,dns|max:250|unique:users,email',
             'password' => 'required|string|min:8|confirmed'
         ];
     }
+    
     public function messages(): array
     {
         return [
